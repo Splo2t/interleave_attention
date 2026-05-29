@@ -9,8 +9,9 @@ Evaluation code for the CIKM 2026 interleave-attention experiments. The reposito
 - `eval_mmlu_kmmlu_hf_krong.py`: single-model evaluator for main benchmarks.
 - `eval_variant_hf_krong.py`: single-model evaluator for KoBEST variant data.
 - `run_eval_checkpoint_sweep.py`: checkpoint sweep runner.
-- `download_kobest_variant_data.py`: downloads materialized KoBEST variant JSONL data from Hugging Face Hub.
+- `prepare_kobest_surface_form_stress.py`: builds P25, P50, and josa-hard KoBEST stress data from public `skt/kobest_v1`.
 - `prepare_kobest_query_context_stress.py`: materializes the HF query-context stress dataset into the local `kobest_variant` JSONL layout.
+- `download_kobest_variant_data.py`: optional helper for downloading pre-materialized KoBEST variant JSONL data from a dataset repository.
 - `scripts/`: conversion, sweep, and export wrappers used in the experiments.
 - `docs/`: benchmark notes and publication checklist.
 
@@ -111,49 +112,29 @@ python prepare_kobest_query_context_stress.py \
 
 ### P25, P50, and josa-hard data
 
-For the paper stress sets, publish each materialized local folder to Hugging Face with the layout above, then download it with `download_kobest_variant_data.py`.
-
-Suggested dataset repo names:
-
-```text
-Splo2t/ko-random-p25
-Splo2t/ko-random-p50
-Splo2t/ko-josa-preserve-compaction-hard
-```
-
-Download examples:
+For anonymous review, these stress sets are generated locally from the public KoBEST dataset instead of being stored in this git repository or uploaded to a separate data host.
 
 ```bash
-python download_kobest_variant_data.py \
-  --repo-id Splo2t/ko-random-p25 \
-  --variant-name ko_random_p25 \
-  --output-root variant_benchmarks \
+python prepare_kobest_surface_form_stress.py \
+  --variant ko_random_p25 \
+  --output-root variant_benchmarks/ko_random_p25 \
+  --cache-root ./hf_cache \
   --overwrite
 
-python download_kobest_variant_data.py \
-  --repo-id Splo2t/ko-random-p50 \
-  --variant-name ko_random_p50 \
-  --output-root variant_benchmarks \
+python prepare_kobest_surface_form_stress.py \
+  --variant ko_random_p50 \
+  --output-root variant_benchmarks/ko_random_p50 \
+  --cache-root ./hf_cache \
   --overwrite
 
-python download_kobest_variant_data.py \
-  --repo-id Splo2t/ko-josa-preserve-compaction-hard \
-  --variant-name ko_josa_preserve_compaction_hard \
-  --output-root variant_benchmarks \
+python prepare_kobest_surface_form_stress.py \
+  --variant ko_josa_preserve_compaction_hard \
+  --output-root variant_benchmarks/ko_josa_preserve_compaction_hard \
+  --cache-root ./hf_cache \
   --overwrite
 ```
 
-Maintainer upload example after creating a dataset repo on Hugging Face:
-
-```bash
-huggingface-cli upload \
-  Splo2t/ko-random-p25 \
-  /path/to/variant_benchmarks/ko_random_p25 \
-  . \
-  --repo-type dataset
-```
-
-Repeat for `ko_random_p50` and `ko_josa_preserve_compaction_hard`.
+The script downloads `skt/kobest_v1`, writes the local `kobest_variant` JSONL layout, and records counts plus transformation metadata in `manifest.json`. If a non-anonymous artifact is prepared later, the optional `download_kobest_variant_data.py` helper can fetch the same materialized layout from a dataset repository.
 
 ## Run Main Benchmarks
 
@@ -211,7 +192,7 @@ python eval_variant_hf_krong.py \
   --save_item_predictions
 ```
 
-Change `--variant_data_root` and `--variant_name` to run P50 or josa-hard.
+Change `--variant_data_root` and `--variant_name` to run P50 or josa-hard after generating those folders with `prepare_kobest_surface_form_stress.py`.
 
 ## Run Controlled Relevance Scoring
 

@@ -2,7 +2,7 @@
 
 Curated view for the paper's KoBEST surface-form stress benchmark.
 
-This folder keeps the `kobest_variant` runner and paper analysis helpers. The benchmark JSONL data is not committed to git; prepare it from Hugging Face into `variant_benchmarks/<variant_name>` and pass that path with `--variant_data_root`.
+This folder keeps the `kobest_variant` runner, KoBEST stress-data materializer, and paper analysis helpers. The benchmark JSONL data is not committed to git; generate it locally from public `skt/kobest_v1` into `variant_benchmarks/<variant_name>` and pass that path with `--variant_data_root`.
 
 Paper stress variants:
 
@@ -13,4 +13,4 @@ ko_josa_preserve_compaction_hard
 kobest_query_context_stress_v3
 ```
 
-See the root `README.md` for Hugging Face download/materialization commands.
+See the root `README.md` for data materialization and evaluation commands.
