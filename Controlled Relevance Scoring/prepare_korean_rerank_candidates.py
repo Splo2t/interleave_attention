@@ -1,0 +1,1 @@
+../prepare_korean_rerank_candidates.py

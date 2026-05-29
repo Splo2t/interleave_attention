@@ -1,0 +1,73 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Local environment and credentials
+.env
+.env.*
+!.env.example
+*.log
+dashboard_*.log
+
+# Hugging Face / local caches
+.cache/
+hf_cache/
+huggingface/
+
+# Model checkpoints and converted model artifacts
+/checkpoint-*
+/checkpoint-*/
+/checkpoints*
+/checkpoints/
+/checkpoints*/
+/converted_checkpoints*
+/converted_checkpoints*/
+krong_hf_mirrors*/
+krong_hf_mirrors_thin*/
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.ckpt
+*.gguf
+zero_pp_rank_*/
+global_step*/
+
+# Evaluation outputs and generated reports
+logs/
+outputs/
+eval_outputs/
+variant_eval_logs*/
+variant_eval_outputs*/
+sweep_results*/
+public_reranker_results/
+diagnostics/
+duplicate_sweep_report.txt
+
+# Generated benchmark data
+variant_benchmarks/
+variant_lexicons/
+rerank_candidates/
+
+# Local comparison/dashboard artifacts
+compare_views/
+paper_drafts/
+
+# Generated local measurement summaries
+context_length_*.json
+
+# Office/export artifacts generated from results
+*.xlsx
+*.xls
+*.csv
+
+# OS/editor noise
+.DS_Store
+.idea/
+.vscode/
+*.swp

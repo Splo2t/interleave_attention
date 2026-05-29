@@ -1,0 +1,1 @@
+../scripts/prepare_miracl_rerank_fewshot_hygiene.sh

@@ -1,0 +1,11 @@
+torch
+transformers
+datasets
+accelerate
+tqdm
+safetensors
+sentencepiece
+protobuf
+kiwipiepy
+numpy
+huggingface_hub

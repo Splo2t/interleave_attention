@@ -1,0 +1,1 @@
+../compare_generation_checkpoints.py
