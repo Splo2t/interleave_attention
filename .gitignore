@@ -71,3 +71,10 @@ context_length_*.json
 .idea/
 .vscode/
 *.swp
+
+# Stage-2 training local artifacts
+stage2_cache/
+KRong-1B-Stage2/
+merged_arrow/
+wandb/
+final/

@@ -16,7 +16,7 @@ from typing import Iterable, Sequence
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-DEFAULT_EVAL_SCRIPT = SCRIPT_DIR / "eval_mmlu_kmmlu_hf_krong.py"
+DEFAULT_EVAL_SCRIPT = SCRIPT_DIR / "eval_paper_benchmarks.py"
 DEFAULT_VARIANT_EVAL_SCRIPT = SCRIPT_DIR / "eval_variant_hf_krong.py"
 STEP_PATTERN = re.compile(r"(?:checkpoint|ckpt|step)[-_]?(\d+)$", flags=re.IGNORECASE)
 VARIANT_TASKS = ("kobest_variant",)
@@ -327,7 +327,7 @@ def _parse_task_list(parser: argparse.ArgumentParser, args: argparse.Namespace) 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
-            "Run eval_mmlu_kmmlu_hf_krong.py across checkpoint-* directories and "
+            "Run eval_paper_benchmarks.py across checkpoint-* directories and "
             "save per-checkpoint JSON, stdout logs, and a sweep summary CSV."
         )
     )

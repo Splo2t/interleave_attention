@@ -155,7 +155,7 @@ Single model:
 PY=/mnt/nas_server_yhw/envs/eval_krong/bin/python
 CACHE_ROOT=/mnt/nas_server_yhw/huggingface
 
-$PY eval_mmlu_kmmlu_hf_krong.py \
+$PY eval_paper_benchmarks.py \
   --ckpt_path /path/to/checkpoint \
   --task korean_rerank \
   --rerank_data rerank_candidates/miracl_ko_dev_bm25_top100.jsonl \
@@ -173,7 +173,7 @@ $PY eval_mmlu_kmmlu_hf_krong.py \
 Krong/interleave model:
 
 ```bash
-$PY eval_mmlu_kmmlu_hf_krong.py \
+$PY eval_paper_benchmarks.py \
   --ckpt_path /path/to/krong/checkpoint \
   --model_arch krong \
   --task korean_rerank \

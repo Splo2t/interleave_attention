@@ -1,0 +1,11 @@
+# Optional dependencies for training/stage2_train.py.
+-r requirements.txt
+pyarrow
+wandb
+deepspeed
+
+# The following are project-local modules and must be available on PYTHONPATH
+# in the original training environment, not installed from this file:
+# - kormo
+# - krong_tokenizer
+# - llama_interleave

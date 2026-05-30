@@ -50,7 +50,7 @@ git push -u origin main
 
 ## 6. Publish large artifacts separately
 
-Use Hugging Face Hub, object storage, or GitHub Releases for:
+Use Google Drive for anonymous checkpoint sharing, or Hugging Face Hub/object storage/GitHub Releases for non-anonymous public artifacts:
 
 - checkpoints
 - converted checkpoints

@@ -2,7 +2,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-eval_mmlu_kmmlu.py
+eval_paper_benchmarks.py
 
 HF(Transformers)로 래핑된 Krong/KORMo 계열 모델을 대상으로
 - MMLU (cais/mmlu)

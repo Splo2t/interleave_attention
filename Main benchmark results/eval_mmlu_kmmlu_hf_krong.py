@@ -1,1 +1,0 @@
-../eval_mmlu_kmmlu_hf_krong.py
