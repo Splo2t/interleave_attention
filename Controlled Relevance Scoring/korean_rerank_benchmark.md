@@ -1,1 +1,0 @@
-../docs/korean_rerank_benchmark.md

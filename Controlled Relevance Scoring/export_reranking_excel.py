@@ -1,1 +1,0 @@
-../scripts/export_reranking_excel.py

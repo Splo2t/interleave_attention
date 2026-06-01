@@ -22,9 +22,14 @@ huggingface/
 # Model checkpoints and converted model artifacts
 /checkpoint-*
 /checkpoint-*/
-/checkpoints*
-/checkpoints/
-/checkpoints*/
+/checkpoints/*
+!/checkpoints/
+!/checkpoints/stage2_interleave_18k/
+!/checkpoints/stage2_interleave_18k/.gitkeep
+!/checkpoints/matched_decoder_only_cpt_control_18k/
+!/checkpoints/matched_decoder_only_cpt_control_18k/.gitkeep
+!/checkpoints/vanilla_cpt_19k/
+!/checkpoints/vanilla_cpt_19k/.gitkeep
 /converted_checkpoints*
 /converted_checkpoints*/
 krong_hf_mirrors*/

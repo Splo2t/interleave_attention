@@ -1,1 +1,0 @@
-../prepare_miracl_ko_hardneg_rerank.py

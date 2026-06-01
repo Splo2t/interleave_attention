@@ -1,1 +1,0 @@
-../run_eval_checkpoint_sweep.py

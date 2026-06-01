@@ -1,1 +1,0 @@
-../prepare_kobest_query_context_stress.py

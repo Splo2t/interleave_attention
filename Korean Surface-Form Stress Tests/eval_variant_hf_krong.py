@@ -1,1 +1,0 @@
-../eval_variant_hf_krong.py

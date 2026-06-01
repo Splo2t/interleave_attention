@@ -1,1 +1,0 @@
-../prepare_rerank_fewshot_demos.py

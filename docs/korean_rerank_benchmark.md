@@ -92,89 +92,19 @@ The evaluator expects one query per line:
 
 Flat JSONL is also accepted. If each line contains `query_id`, `query`, `doc_id`, `text`, and `relevance`, the evaluator groups candidates by `query_id`.
 
-## Building Candidate JSONL
+## Candidate Data
 
-Use `prepare_korean_rerank_candidates.py` when you already have:
-
-- query JSONL
-- corpus JSONL
-- TREC-style run file from BM25 or dense retrieval
-- qrels file
-
-Example:
-
-```bash
-python prepare_korean_rerank_candidates.py \
-  --queries-jsonl data/miracl_ko/queries.dev.jsonl \
-  --corpus-jsonl data/miracl_ko/corpus.jsonl \
-  --run-file runs/miracl_ko_bm25_top100.trec \
-  --qrels-file data/miracl_ko/qrels.dev.tsv \
-  --out-jsonl rerank_candidates/miracl_ko_dev_bm25_top100.jsonl \
-  --max-candidates 100
-```
-
-### Controlled Hard-Negative Candidate Set
-
-For the diagnostic experiment, use `--candidate-mode controlled-hard-negative`. This mode does not rely on whether BM25 happened to retrieve a positive passage in the top-k list. Instead, it injects qrels positives first and then fills the remaining slots with top-ranked non-relevant documents from the run file. This gives each query at least one known positive and several lexical hard negatives.
-
-```bash
-python prepare_korean_rerank_candidates.py \
-  --queries-jsonl data/miracl_ko/queries.dev.jsonl \
-  --corpus-jsonl data/miracl_ko/corpus.jsonl \
-  --run-file runs/miracl_ko_bm25_top100.trec \
-  --qrels-file data/miracl_ko/qrels.dev.tsv \
-  --out-jsonl rerank_candidates/miracl_ko_dev_controlled_hardneg.jsonl \
-  --candidate-mode controlled-hard-negative \
-  --max-candidates 100 \
-  --max-positives 1 \
-  --min-negatives 1 \
-  --max-run-depth 1000
-```
-
-Use `candidate_source` in the output JSONL to audit candidate construction. Positives are marked as `qrels_positive`, and BM25 hard negatives are marked as `hard_negative_run`.
-
-Supported run formats:
-
-```text
-qid Q0 docid rank score tag
-qid docid score
-```
-
-Supported qrels formats:
-
-```text
-qid 0 docid rel
-qid docid rel
-```
+This trimmed reviewer repository does not include candidate-building scripts.
+Provide a prepared reranking JSONL file under `rerank_candidates/`, or pass its
+path with `--rerank_data`.
 
 ## Running The Benchmark
 
 Single model:
 
 ```bash
-PY=/mnt/nas_server_yhw/envs/eval_krong/bin/python
-CACHE_ROOT=/mnt/nas_server_yhw/huggingface
-
-$PY eval_paper_benchmarks.py \
-  --ckpt_path /path/to/checkpoint \
-  --task korean_rerank \
-  --rerank_data rerank_candidates/miracl_ko_dev_bm25_top100.jsonl \
-  --rerank_max_candidates 100 \
-  --rerank_score_mode diff \
-  --dtype bf16 \
-  --device_map auto \
-  --cache_root "$CACHE_ROOT" \
-  --eval_batch_size 4 \
-  --continuation_scoring oneshot \
-  --dec_max_len 4096 \
-  --out_json eval_outputs/miracl_ko_rerank.json
-```
-
-Krong/interleave model:
-
-```bash
-$PY eval_paper_benchmarks.py \
-  --ckpt_path /path/to/krong/checkpoint \
+python eval_paper_benchmarks.py \
+  --ckpt_path checkpoints/stage2_interleave_18k \
   --model_arch krong \
   --task korean_rerank \
   --rerank_data rerank_candidates/miracl_ko_dev_bm25_top100.jsonl \
@@ -182,29 +112,28 @@ $PY eval_paper_benchmarks.py \
   --rerank_score_mode diff \
   --dtype bf16 \
   --device_map auto \
-  --cache_root "$CACHE_ROOT" \
+  --cache_root ./hf_cache \
   --eval_batch_size 4 \
   --continuation_scoring oneshot \
   --dec_max_len 4096 \
-  --out_json eval_outputs/miracl_ko_rerank_krong.json
+  --out_json eval_outputs/miracl_ko_rerank.json
 ```
 
-Checkpoint sweep:
+Multiple tasks through the sweep helper:
 
 ```bash
-$PY run_eval_checkpoint_sweep.py \
-  --single-ckpt-path /path/to/checkpoint \
-  --single-ckpt-name model_name \
-  --single-ckpt-step 19000 \
+python run_eval_checkpoint_sweep.py \
+  --single-ckpt-path checkpoints/stage2_interleave_18k \
+  --single-ckpt-name stage2_interleave_18k \
+  --single-ckpt-step 18000 \
   --tasks korean_rerank \
   --rerank_data rerank_candidates/miracl_ko_dev_bm25_top100.jsonl \
   --rerank_max_candidates 100 \
   --rerank_score_mode diff \
   --result-root sweep_results/model_name_korean_rerank \
-  --python-bin "$PY" \
   --dtype bf16 \
   --device_map auto \
-  --cache_root "$CACHE_ROOT" \
+  --cache_root ./hf_cache \
   --eval_batch_size 4 \
   --continuation_scoring oneshot \
   --dec_max_len 4096
@@ -218,10 +147,10 @@ Few-shot reranking is supported without hand-written demonstrations. Use `--rera
 Example:
 
 ```bash
-$PY run_eval_checkpoint_sweep.py \
-  --single-ckpt-path /path/to/checkpoint \
-  --single-ckpt-name model_name \
-  --single-ckpt-step 19000 \
+python run_eval_checkpoint_sweep.py \
+  --single-ckpt-path checkpoints/stage2_interleave_18k \
+  --single-ckpt-name stage2_interleave_18k \
+  --single-ckpt-step 18000 \
   --tasks korean_rerank \
   --rerank_data rerank_candidates/miracl_ko_hardneg_dev.jsonl \
   --rerank_max_candidates 20 \
@@ -229,10 +158,9 @@ $PY run_eval_checkpoint_sweep.py \
   --rerank_num_fewshot 4 \
   --rerank_fewshot_seed 42 \
   --result-root sweep_results_rerank/model_name_miracl_fs4 \
-  --python-bin "$PY" \
   --dtype bf16 \
   --device_map auto \
-  --cache_root "$CACHE_ROOT" \
+  --cache_root ./hf_cache \
   --eval_batch_size 1 \
   --continuation_scoring oneshot \
   --dec_max_len 4096
